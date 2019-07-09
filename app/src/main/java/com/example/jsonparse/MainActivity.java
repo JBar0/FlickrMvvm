@@ -1,14 +1,19 @@
 package com.example.jsonparse;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.jsonparse.models.Flickr;
+import com.example.jsonparse.models.Item;
+import com.example.jsonparse.models.Media;
 
 import java.util.List;
 
@@ -31,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Flickr flickr) {
                 adapter.setItemList(flickr);
+            }
+        });
+
+        adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Item item) {
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(MainActivity.this, Uri.parse(item.getLink()));
             }
         });
 
