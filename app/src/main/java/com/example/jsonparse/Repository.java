@@ -47,30 +47,4 @@ public class Repository {
         });
         return mutableLiveData;
     }
-
-//    public Flickr getFlickr() {
-//        final Flickr flickr = new Flickr();
-//        JsonHolderApi jsonHolderApi = getJsonHolderApi();
-//
-//        jsonHolderApi.getFlickrRec("json", 1).enqueue(new Callback<Flickr>() {
-//            @Override
-//            public void onResponse(Call<Flickr> call, Response<Flickr> response) {
-//                Flickr flickr1 = response.body();
-//                flickr.setDescription(flickr1.getDescription());
-//                flickr.setGenerator(flickr1.getGenerator());
-//                flickr.setItems(flickr1.getItems());
-//                flickr.setLink(flickr1.getLink());
-//                flickr.setModified(flickr1.getModified());
-//                flickr.setTitle(flickr1.getTitle());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Flickr> call, Throwable t) {
-//                Log.e(TAG, "onFailure: " + t.getMessage());
-//            }
-//        });
-//
-//        return flickr;
-//    }
-
 }

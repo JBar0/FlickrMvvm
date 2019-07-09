@@ -45,7 +45,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return ((itemList != null) && (itemList.size() != 0) ? itemList.size() : 0);
+        return itemList.size();
     }
 
     public void setItemList(Flickr flickr) {

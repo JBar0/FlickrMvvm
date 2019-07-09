@@ -34,13 +34,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-//        noteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
-//            @Override
-//            public void onChanged(List<Note> notes) {
-//                //update RecyclerView
-//                adapter.setNotes(notes);
-//            }
-//        });
     }
 }
