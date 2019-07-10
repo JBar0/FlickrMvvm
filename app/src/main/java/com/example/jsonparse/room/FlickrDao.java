@@ -1,6 +1,7 @@
 package com.example.jsonparse.room;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -8,13 +9,11 @@ import androidx.room.Update;
 
 import com.example.jsonparse.models.Flickr;
 
-import java.util.List;
-
-@androidx.room.Dao
+@Dao
 public interface FlickrDao {
 
     @Insert
-    void insert(Flickr flickr);
+    long insert(Flickr flickr);
 
     @Update
     void update(Flickr flickr);
@@ -22,8 +21,6 @@ public interface FlickrDao {
     @Delete
     void delete(Flickr flickr);
 
-    @Query("SELECT * FROM flickr_table")
+    @Query("SELECT * FROM Flickr")
     LiveData<Flickr> getAllFlickrEnt();
-
-
 }

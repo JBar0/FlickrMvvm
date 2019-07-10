@@ -28,14 +28,16 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final RecyclerAdapter adapter = new RecyclerAdapter(this);
+        final RecyclerAdapter adapter = new RecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(this).get(ViewModel.class);
         viewModel.getLiveFlickr().observe(this, new Observer<Flickr>() {
             @Override
             public void onChanged(Flickr flickr) {
-                adapter.setItemList(flickr);
+                if (flickr != null) {
+                    adapter.setItemList(flickr.getItems());
+                }
             }
         });
 
@@ -51,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                viewModel.getLiveFlickr();
+                viewModel.refresh();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 

@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 
 public class Converter {
@@ -15,17 +16,17 @@ public class Converter {
 
     @TypeConverter
     public String fromItemsList(List<Item> list){
-        if(list == null || !list.isEmpty()){
+        if(list == null || list.isEmpty()){
             return null;
         }else {
-            return new Gson().toJson(list, listArrayType);
+            return new Gson().toJson(list);
         }
     }
 
     @TypeConverter
     public List<Item> toItemsList(String json){
         if(json == null){
-            return null;
+            return Collections.emptyList();
         }else {
             return new Gson().fromJson(json, listArrayType);
         }

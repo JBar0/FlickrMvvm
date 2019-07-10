@@ -11,8 +11,6 @@ import com.example.jsonparse.network.JsonHolderApi;
 import com.example.jsonparse.room.FlickrDao;
 import com.example.jsonparse.room.FlickrDatabase;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,8 +59,12 @@ public class Repository {
         jsonHolderApi.getFlickrRec("json",1).enqueue(new Callback<Flickr>() {
             @Override
             public void onResponse(Call<Flickr> call, Response<Flickr> response) {
-                Flickr flickr = response.body();
-                flickrDao.insert(flickr); // background
+                if (response.isSuccessful()) {
+                    Flickr flickr = response.body();
+                    insert(flickr);
+                } else {
+                    Log.e(TAG, "onFailure: " + response.message());
+                }
             }
 
             @Override

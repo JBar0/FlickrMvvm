@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-@Entity(tableName = "flickr_table")
+@Entity
 public class Flickr {
 
     @PrimaryKey(autoGenerate = true)
@@ -100,4 +100,16 @@ public class Flickr {
         this.items = items;
     }
 
+    @Override
+    public String toString() {
+        return "Flickr{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", link='" + link + '\'' +
+                ", description='" + description + '\'' +
+                ", modified='" + modified + '\'' +
+                ", generator='" + generator + '\'' +
+                ", items=" + items +
+                '}';
+    }
 }

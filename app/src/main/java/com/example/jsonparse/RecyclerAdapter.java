@@ -1,30 +1,27 @@
 package com.example.jsonparse;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.jsonparse.models.Flickr;
-import com.example.jsonparse.models.Item;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.jsonparse.models.Flickr;
+import com.example.jsonparse.models.Item;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    private List<Item> itemList = new ArrayList<>();
-    private Context mContext;
+    private List<Item> itemList;
     private OnItemClickListener listener;
 
 
-    public RecyclerAdapter(Context mContext) {
-        this.mContext = mContext;
+    public RecyclerAdapter() {
+        this.itemList = Collections.emptyList();
     }
 
     @NonNull
@@ -39,7 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Item item = itemList.get(position);
-        Picasso.with(mContext).load(item.getMedia().getM())
+        Picasso.get().load(item.getMedia().getM())
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.imgView);
@@ -50,8 +47,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return itemList.size();
     }
 
-    public void setItemList(Flickr flickr) {
-        this.itemList = flickr.getItems();
+    public void setItemList(List<Item> items) {
+        if (items != null) {
+            this.itemList = items;
+        } else {
+            this.itemList = Collections.emptyList();
+        }
         notifyDataSetChanged();
     }
 
