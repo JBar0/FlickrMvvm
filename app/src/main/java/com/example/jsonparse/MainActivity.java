@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Flickr flickr) {
                 adapter.setItemList(flickr);
-                FlickrEntity entity = new FlickrEntity(flickr.getTitle(), flickr.getLink());
-                viewModel.insert(entity);
             }
         });
 
@@ -54,20 +52,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                viewModel.getLiveFlickr().observe(MainActivity.this, new Observer<Flickr>() {
-                    @Override
-                    public void onChanged(Flickr flickr) {
-                        adapter.setItemList(flickr);
-                        FlickrEntity entity = new FlickrEntity(flickr.getTitle(), flickr.getLink());
-                        viewModel.insert(entity);
-                        if (swipeRefreshLayout.isRefreshing()) {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-//                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
-
-
+                viewModel.getLiveFlickr();
             }
         });
 

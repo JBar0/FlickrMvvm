@@ -1,26 +1,41 @@
 package com.example.jsonparse.models;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity
 public class Flickr {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @SerializedName("title")
     @Expose
     private String title;
+
     @SerializedName("link")
     @Expose
     private String link;
+
     @SerializedName("description")
     @Expose
     private String description;
+
     @SerializedName("modified")
     @Expose
     private String modified;
+
+    @Ignore
     @SerializedName("generator")
     @Expose
     private String generator;
+
     @SerializedName("items")
     @Expose
     private List<Item> items = null;

@@ -24,16 +24,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Repository {
     private static final String TAG = "Repository";
     public static final String BASE_URL = "https://www.flickr.com/";
-    private LiveData<List<FlickrEntity>> allFlickrEnt;
+//    private LiveData<List<FlickrEntity>> allFlickrEnt;
     private FlickrDao flickrDao;
 
     public Repository(Application application) {
         FlickrDatabase database = FlickrDatabase.getInstance(application);
         flickrDao = database.flickrDao();
-        allFlickrEnt = flickrDao.getAllFlickrEnt();
+//        allFlickrEnt = flickrDao.getAllFlickrEnt();
     }
 
-    public void insert(FlickrEntity flickrEntity) {
+    public void insert(Flickr flickrEntity) {
         new InsertFlickrEntAsyncTask(flickrDao).execute(flickrEntity);
     }
 
@@ -46,7 +46,7 @@ public class Repository {
     }
 
     public LiveData<List<FlickrEntity>> getAllFlickrEnt() {
-        return allFlickrEnt;
+        return flickrDao.getAllFlickrEnt();
     }
 
     private static Retrofit getRetrofitInstance() {
@@ -58,14 +58,14 @@ public class Repository {
     }
 
 
-    public LiveData<Flickr> getFlickr() {
-        final MutableLiveData<Flickr> mutableLiveData = new MutableLiveData<>();
+    public void getFlickr() {
         JsonHolderApi jsonHolderApi = getJsonHolderApi();
         jsonHolderApi.getFlickrRec("json",1).enqueue(new Callback<Flickr>() {
             @Override
             public void onResponse(Call<Flickr> call, Response<Flickr> response) {
                 Flickr flickr = response.body();
-                mutableLiveData.setValue(flickr);
+
+                flickrDao.insert(flickr); // background
             }
 
             @Override
@@ -73,7 +73,6 @@ public class Repository {
                 Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });
-        return mutableLiveData;
     }
 
 
