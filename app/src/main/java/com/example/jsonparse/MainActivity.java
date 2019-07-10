@@ -1,29 +1,30 @@
 package com.example.jsonparse;
 
+import android.net.Uri;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.jsonparse.models.Flickr;
 import com.example.jsonparse.models.Item;
-import com.example.jsonparse.models.Media;
-
-import java.util.List;
+import com.example.jsonparse.room.FlickrEntity;
 
 public class MainActivity extends AppCompatActivity {
     private ViewModel viewModel;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        swipeRefreshLayout = findViewById(R.id.pull_to_refresh);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Flickr flickr) {
                 adapter.setItemList(flickr);
+                FlickrEntity entity = new FlickrEntity(flickr.getTitle(), flickr.getLink());
+                viewModel.insert(entity);
             }
         });
 
@@ -45,6 +48,26 @@ public class MainActivity extends AppCompatActivity {
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 CustomTabsIntent customTabsIntent = builder.build();
                 customTabsIntent.launchUrl(MainActivity.this, Uri.parse(item.getLink()));
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                viewModel.getLiveFlickr().observe(MainActivity.this, new Observer<Flickr>() {
+                    @Override
+                    public void onChanged(Flickr flickr) {
+                        adapter.setItemList(flickr);
+                        FlickrEntity entity = new FlickrEntity(flickr.getTitle(), flickr.getLink());
+                        viewModel.insert(entity);
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+//                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+
+
             }
         });
 

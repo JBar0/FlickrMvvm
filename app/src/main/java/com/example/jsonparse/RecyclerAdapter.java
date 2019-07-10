@@ -12,7 +12,6 @@ import com.example.jsonparse.models.Item;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.jsonparse.models.Media;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
