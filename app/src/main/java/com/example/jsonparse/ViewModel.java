@@ -7,9 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.jsonparse.models.Flickr;
-import com.example.jsonparse.room.FlickrEntity;
-
-import java.util.List;
 
 public class ViewModel extends AndroidViewModel {
     private Repository repository;
@@ -30,11 +27,11 @@ public class ViewModel extends AndroidViewModel {
         repository.insert(flickrEntity);
     }
 
-    public void update(FlickrEntity flickrEntity) {
+    public void update(Flickr flickrEntity) {
         repository.delete(flickrEntity);
     }
 
-    public void delete(FlickrEntity flickrEntity) {
+    public void delete(Flickr flickrEntity) {
         repository.delete(flickrEntity);
     }
 

@@ -13,7 +13,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.jsonparse.models.Flickr;
 import com.example.jsonparse.models.Item;
-import com.example.jsonparse.room.FlickrEntity;
 
 public class MainActivity extends AppCompatActivity {
     private ViewModel viewModel;

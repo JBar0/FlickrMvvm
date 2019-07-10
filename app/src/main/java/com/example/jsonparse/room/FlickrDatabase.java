@@ -6,7 +6,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {FlickrEntity.class}, version = 1)
+import com.example.jsonparse.models.Flickr;
+
+@Database(entities = {Flickr.class}, version = 1)
 public abstract class FlickrDatabase extends RoomDatabase {
     private static FlickrDatabase instance;
 

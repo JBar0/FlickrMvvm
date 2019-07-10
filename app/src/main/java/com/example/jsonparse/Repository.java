@@ -5,13 +5,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.jsonparse.models.Flickr;
 import com.example.jsonparse.network.JsonHolderApi;
 import com.example.jsonparse.room.FlickrDao;
 import com.example.jsonparse.room.FlickrDatabase;
-import com.example.jsonparse.room.FlickrEntity;
 
 import java.util.List;
 
@@ -37,15 +35,15 @@ public class Repository {
         new InsertFlickrEntAsyncTask(flickrDao).execute(flickrEntity);
     }
 
-    public void update(FlickrEntity flickrEntity) {
+    public void update(Flickr flickrEntity) {
         new UpdateFlickrEntAsyncTask(flickrDao).execute(flickrEntity);
     }
 
-    public void delete(FlickrEntity flickrEntity) {
+    public void delete(Flickr flickrEntity) {
         new DeleteFlickrEntAsyncTask(flickrDao).execute(flickrEntity);
     }
 
-    public LiveData<List<FlickrEntity>> getAllFlickrEnt() {
+    public LiveData<Flickr> getAllFlickrEnt() {
         return flickrDao.getAllFlickrEnt();
     }
 
@@ -64,7 +62,6 @@ public class Repository {
             @Override
             public void onResponse(Call<Flickr> call, Response<Flickr> response) {
                 Flickr flickr = response.body();
-
                 flickrDao.insert(flickr); // background
             }
 
@@ -76,22 +73,21 @@ public class Repository {
     }
 
 
-    private static class InsertFlickrEntAsyncTask extends AsyncTask<FlickrEntity, Void, Void> {
+    private static class InsertFlickrEntAsyncTask extends AsyncTask<Flickr, Void, Void> {
         private FlickrDao flickrDao;
 
         private InsertFlickrEntAsyncTask(FlickrDao flickrDao) {
             this.flickrDao = flickrDao;
         }
 
-
         @Override
-        protected Void doInBackground(FlickrEntity... flickrEntities) {
-            flickrDao.insert(flickrEntities[0]);
+        protected Void doInBackground(Flickr... flickrs) {
+            flickrDao.insert(flickrs[0]);
             return null;
         }
     }
 
-    private static class UpdateFlickrEntAsyncTask extends AsyncTask<FlickrEntity, Void, Void> {
+    private static class UpdateFlickrEntAsyncTask extends AsyncTask<Flickr, Void, Void> {
         private FlickrDao flickrDao;
 
         private UpdateFlickrEntAsyncTask(FlickrDao flickrDao) {
@@ -99,13 +95,13 @@ public class Repository {
         }
 
         @Override
-        protected Void doInBackground(FlickrEntity... flickrEntities) {
-            flickrDao.update(flickrEntities[0]);
+        protected Void doInBackground(Flickr... flickrs) {
+            flickrDao.update(flickrs[0]);
             return null;
         }
     }
 
-    private static class DeleteFlickrEntAsyncTask extends AsyncTask<FlickrEntity, Void, Void> {
+    private static class DeleteFlickrEntAsyncTask extends AsyncTask<Flickr, Void, Void> {
         private FlickrDao flickrDao;
 
         private DeleteFlickrEntAsyncTask(FlickrDao flickrDao) {
@@ -113,8 +109,8 @@ public class Repository {
         }
 
         @Override
-        protected Void doInBackground(FlickrEntity... flickrEntities) {
-            flickrDao.delete(flickrEntities[0]);
+        protected Void doInBackground(Flickr... flickrs) {
+            flickrDao.delete(flickrs[0]);
             return null;
         }
     }

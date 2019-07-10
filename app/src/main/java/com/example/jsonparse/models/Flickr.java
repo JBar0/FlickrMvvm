@@ -9,24 +9,28 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-@Entity
+@Entity(tableName = "flickr_table")
 public class Flickr {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @Ignore
     @SerializedName("title")
     @Expose
     private String title;
 
+    @Ignore
     @SerializedName("link")
     @Expose
     private String link;
 
+    @Ignore
     @SerializedName("description")
     @Expose
     private String description;
 
+    @Ignore
     @SerializedName("modified")
     @Expose
     private String modified;
@@ -39,6 +43,14 @@ public class Flickr {
     @SerializedName("items")
     @Expose
     private List<Item> items = null;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
