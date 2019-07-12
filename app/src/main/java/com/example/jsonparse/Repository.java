@@ -1,15 +1,19 @@
 package com.example.jsonparse;
 
 import android.app.Application;
+import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.jsonparse.models.Flickr;
+import com.example.jsonparse.models.Item;
 import com.example.jsonparse.network.JsonHolderApi;
 import com.example.jsonparse.room.FlickrDao;
 import com.example.jsonparse.room.FlickrDatabase;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,19 +33,19 @@ public class Repository {
 //        allFlickrEnt = flickrDao.getAllFlickrEnt();
     }
 
-    public void insert(Flickr flickrEntity) {
-        new InsertFlickrEntAsyncTask(flickrDao).execute(flickrEntity);
+    public void insert(List<Item> items) {
+        new InsertFlickrEntAsyncTask(flickrDao).execute(items);
     }
 
-    public void update(Flickr flickrEntity) {
-        new UpdateFlickrEntAsyncTask(flickrDao).execute(flickrEntity);
+    public void update(List<Item> items) {
+        new UpdateFlickrEntAsyncTask(flickrDao).execute(items);
     }
 
-    public void delete(Flickr flickrEntity) {
-        new DeleteFlickrEntAsyncTask(flickrDao).execute(flickrEntity);
+    public void delete(List<Item> items) {
+        new DeleteFlickrEntAsyncTask(flickrDao).execute(items);
     }
 
-    public LiveData<Flickr> getAllFlickrEnt() {
+    public LiveData<List<Item>> getAllFlickrEnt() {
         return flickrDao.getAllFlickrEnt();
     }
 
@@ -61,7 +65,7 @@ public class Repository {
             public void onResponse(Call<Flickr> call, Response<Flickr> response) {
                 if (response.isSuccessful()) {
                     Flickr flickr = response.body();
-                    insert(flickr);
+                    insert(flickr.getItems());
                 } else {
                     Log.e(TAG, "onFailure: " + response.message());
                 }
@@ -75,7 +79,7 @@ public class Repository {
     }
 
 
-    private static class InsertFlickrEntAsyncTask extends AsyncTask<Flickr, Void, Void> {
+    private static class InsertFlickrEntAsyncTask extends AsyncTask<List<Item>, Void, Void> {
         private FlickrDao flickrDao;
 
         private InsertFlickrEntAsyncTask(FlickrDao flickrDao) {
@@ -83,13 +87,13 @@ public class Repository {
         }
 
         @Override
-        protected Void doInBackground(Flickr... flickrs) {
-            flickrDao.insert(flickrs[0]);
+        protected Void doInBackground(List<Item>... lists) {
+            flickrDao.insert(lists[0]);
             return null;
         }
     }
 
-    private static class UpdateFlickrEntAsyncTask extends AsyncTask<Flickr, Void, Void> {
+    private static class UpdateFlickrEntAsyncTask extends AsyncTask<List<Item>, Void, Void> {
         private FlickrDao flickrDao;
 
         private UpdateFlickrEntAsyncTask(FlickrDao flickrDao) {
@@ -97,13 +101,13 @@ public class Repository {
         }
 
         @Override
-        protected Void doInBackground(Flickr... flickrs) {
-            flickrDao.update(flickrs[0]);
+        protected Void doInBackground(List<Item>... lists) {
+            flickrDao.insert(lists[0]);
             return null;
         }
     }
 
-    private static class DeleteFlickrEntAsyncTask extends AsyncTask<Flickr, Void, Void> {
+    private static class DeleteFlickrEntAsyncTask extends AsyncTask<List<Item>, Void, Void> {
         private FlickrDao flickrDao;
 
         private DeleteFlickrEntAsyncTask(FlickrDao flickrDao) {
@@ -111,8 +115,8 @@ public class Repository {
         }
 
         @Override
-        protected Void doInBackground(Flickr... flickrs) {
-            flickrDao.delete(flickrs[0]);
+        protected Void doInBackground(List<Item>... lists) {
+            flickrDao.insert(lists[0]);
             return null;
         }
     }

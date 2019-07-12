@@ -8,8 +8,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.example.jsonparse.models.Flickr;
+import com.example.jsonparse.models.Item;
 
-@Database(entities = {Flickr.class}, version = 1)
+@Database(entities = {Item.class}, version = 3)
 @TypeConverters({Converter.class})
 public abstract class FlickrDatabase extends RoomDatabase {
     private static FlickrDatabase instance;

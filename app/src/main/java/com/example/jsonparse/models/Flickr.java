@@ -12,30 +12,23 @@ import java.util.List;
 @Entity
 public class Flickr {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
 
-    @Ignore
     @SerializedName("title")
     @Expose
     private String title;
 
-    @Ignore
     @SerializedName("link")
     @Expose
     private String link;
 
-    @Ignore
     @SerializedName("description")
     @Expose
     private String description;
 
-    @Ignore
     @SerializedName("modified")
     @Expose
     private String modified;
 
-    @Ignore
     @SerializedName("generator")
     @Expose
     private String generator;
@@ -43,14 +36,6 @@ public class Flickr {
     @SerializedName("items")
     @Expose
     private List<Item> items = null;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -98,18 +83,5 @@ public class Flickr {
 
     public void setItems(List<Item> items) {
         this.items = items;
-    }
-
-    @Override
-    public String toString() {
-        return "Flickr{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", link='" + link + '\'' +
-                ", description='" + description + '\'' +
-                ", modified='" + modified + '\'' +
-                ", generator='" + generator + '\'' +
-                ", items=" + items +
-                '}';
     }
 }

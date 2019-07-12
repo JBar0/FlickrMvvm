@@ -8,19 +8,25 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.jsonparse.models.Flickr;
+import com.example.jsonparse.models.Item;
+
+import java.util.List;
 
 @Dao
 public interface FlickrDao {
 
     @Insert
-    long insert(Flickr flickr);
+    void insert(Item item);
+
+    @Insert
+    void insert(List<Item> items);
 
     @Update
-    void update(Flickr flickr);
+    void update(List<Item> items);
 
     @Delete
-    void delete(Flickr flickr);
+    void delete(List<Item> items);
 
     @Query("SELECT * FROM Flickr")
-    LiveData<Flickr> getAllFlickrEnt();
+    LiveData<List<Item>> getAllFlickrEnt();
 }

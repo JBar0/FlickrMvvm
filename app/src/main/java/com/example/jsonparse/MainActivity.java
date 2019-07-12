@@ -14,6 +14,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.jsonparse.models.Flickr;
 import com.example.jsonparse.models.Item;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private ViewModel viewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -32,12 +34,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(this).get(ViewModel.class);
-        viewModel.getLiveFlickr().observe(this, new Observer<Flickr>() {
+        viewModel.getLiveFlickr().observe(this, new Observer<List<Item>>() {
             @Override
-            public void onChanged(Flickr flickr) {
-                if (flickr != null) {
-                    adapter.setItemList(flickr.getItems());
-                }
+            public void onChanged(List<Item> items) {
+                adapter.setItemList(items);
             }
         });
 
