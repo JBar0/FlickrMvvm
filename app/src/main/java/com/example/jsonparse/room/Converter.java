@@ -3,6 +3,7 @@ package com.example.jsonparse.room;
 import androidx.room.TypeConverter;
 
 import com.example.jsonparse.models.Item;
+import com.example.jsonparse.models.Media;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -29,6 +30,24 @@ public class Converter {
             return Collections.emptyList();
         }else {
             return new Gson().fromJson(json, listArrayType);
+        }
+    }
+
+    @TypeConverter
+    public String fromMedia(Media media) {
+        if (media == null) {
+            return null;
+        } else {
+            return media.getM();
+        }
+    }
+
+    @TypeConverter
+    public Media toMedia(String m) {
+        if (m == null) {
+            return null;
+        } else {
+            return new Media(m);
         }
     }
 

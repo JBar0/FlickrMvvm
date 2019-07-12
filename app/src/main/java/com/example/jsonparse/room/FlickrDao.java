@@ -27,6 +27,6 @@ public interface FlickrDao {
     @Delete
     void delete(List<Item> items);
 
-    @Query("SELECT * FROM Flickr")
+    @Query("SELECT * FROM Item ORDER BY id DESC")
     LiveData<List<Item>> getAllFlickrEnt();
 }

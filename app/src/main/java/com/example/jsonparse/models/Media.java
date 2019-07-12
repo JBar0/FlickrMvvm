@@ -9,6 +9,10 @@ public class Media {
     @Expose
     private String m;
 
+    public Media(String m) {
+        this.m = m;
+    }
+
     public String getM() {
         return m;
     }

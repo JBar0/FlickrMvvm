@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getLiveFlickr().observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
-                adapter.setItemList(items);
+                if (items != null) {
+                    adapter.setItemList(items);
+                }
             }
         });
 
