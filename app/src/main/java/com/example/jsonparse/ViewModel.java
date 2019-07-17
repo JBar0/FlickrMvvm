@@ -1,55 +1,64 @@
 package com.example.jsonparse;
 
 import android.app.Application;
-import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.jsonparse.services.DownloadService;
-import com.example.jsonparse.models.Flickr;
 import com.example.jsonparse.models.Item;
+import com.example.jsonparse.room.FlickrDatabase;
+import com.example.jsonparse.services.DownloadService;
 import com.example.jsonparse.services.ResReceiver;
 
 import java.util.List;
 
+
 public class ViewModel extends AndroidViewModel {
-    private Repository repository;
-    private LiveData<List<Item>> liveFlickr;
+    private LiveData<List<Item>> liveFlickr = FlickrDatabase.getInstance(getApplication()).flickrDao().getAllFlickrEnt();
 
-    MutableLiveData<Boolean> isLoading;
+    private MutableLiveData<Boolean> isLoading;
 
-    public ViewModel(@NonNull Application application, ResReceiver receiver) {
+    private ResReceiver.Receiver receiver = new ResReceiver.Receiver() {
+        @Override
+        public void onReceiveResult(int resultCode, Bundle resultData) {
+            if (resultData != null) {
+                switch (resultCode) {
+                    case ResReceiver.IDLE:
+                        isLoading.postValue(false);
+                        break;
+                    case ResReceiver.RUNNING:
+                        isLoading.postValue(true);
+                        break;
+                    case ResReceiver.ERROR:
+                        isLoading.postValue(false);
+                        Log.d("ERROR", "onReceiveResult: " + resultData.getString(DownloadService.SEND_TEXT));
+                        break;
+                }
+            }
+        }
+    };
+
+    public ViewModel(@NonNull Application application) {
         super(application);
-        this.repository = new Repository(application);
-        this.liveFlickr = getLiveFlickr();
-        refresh(application.getApplicationContext(), receiver);
     }
 
-    public void refresh(Context context, ResReceiver receiver){
-        DownloadService.enqueue(context, receiver);
+    public void refresh() {
+        DownloadService.enqueue(getApplication(), new ResReceiver(receiver));
     }
 
     public LiveData<List<Item>> getLiveFlickr() {
-        return repository.getAllFlickrEnt();
+        return liveFlickr;
     }
 
-    public MutableLiveData<Boolean> getDownloadResult() {
-        return repository.getDownloadResult();
+    public MutableLiveData<Boolean> getIsLoading() {
+        if (isLoading == null) {
+            isLoading = new MutableLiveData<>();
+            isLoading.postValue(false);
+        }
+        return isLoading;
     }
-
-    public void insert(Context context, Flickr flickr) {
-        repository.insert(context, flickr);
-    }
-
-    public void update(Context context, Flickr flickr) {
-        repository.update(context, flickr);
-    }
-
-    public void delete(Context context, Flickr flickr) {
-        repository.delete(context, flickr);
-    }
-
 }

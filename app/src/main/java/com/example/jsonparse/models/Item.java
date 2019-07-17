@@ -1,5 +1,8 @@
 package com.example.jsonparse.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -8,7 +11,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
-public class Item {
+public class Item implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -121,4 +124,13 @@ public class Item {
         this.tags = tags;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

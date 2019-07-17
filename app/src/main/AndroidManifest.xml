@@ -23,16 +23,10 @@
         <service
             android:name=".services.InsertDbService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name=".services.UpdateDbService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name=".services.DeleteDbService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.DownloadService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
     </application>
 
 </manifest>

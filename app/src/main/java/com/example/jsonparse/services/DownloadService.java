@@ -3,33 +3,26 @@ package com.example.jsonparse.services;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.ResultReceiver;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.jsonparse.models.Flickr;
+import com.example.jsonparse.network.Controller;
 import com.example.jsonparse.network.JsonHolderApi;
+import com.example.jsonparse.room.FlickrDatabase;
 
 import java.io.IOException;
 
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DownloadService extends JobIntentService {
     private static final String TAG = "DownloadService";
-    public static final String BASE_URL = "https://www.flickr.com/";
     public static final String RECEIVER = "receiver";
     public static final String SEND_TEXT = "data";
-    public static final int GOOD_RESULT = 1;
-    public static final int BAD_RESULT = 2;
 
-    private ResReceiver resReceiver;
-
-    private MutableLiveData<Boolean> mElapsedTime = new MutableLiveData<>();
-
+    private ResultReceiver resReceiver;
 
     public static void enqueue(Context context, ResReceiver resReceiver) {
         Intent intent = new Intent(context, DownloadService.class);
@@ -37,36 +30,22 @@ public class DownloadService extends JobIntentService {
         enqueueWork(context, DownloadService.class, 12, intent);
     }
 
-    private static Retrofit getRetrofitInstance() {
-        return new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
-    }
-
-    public static JsonHolderApi getJsonHolderApi() {
-        return getRetrofitInstance().create(JsonHolderApi.class);
-    }
-
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        JsonHolderApi jsonHolderApi = getJsonHolderApi();
+        JsonHolderApi jsonHolderApi = Controller.getJsonHolderApi();
         Call<Flickr> response = jsonHolderApi.getFlickrRec("json", 1);
         resReceiver = intent.getParcelableExtra(RECEIVER);
-        Bundle bundle = new Bundle();
+        resReceiver.send(ResReceiver.RUNNING, new Bundle());
 
         try {
             Flickr flickr = response.execute().body();
-            InsertDbService.enqueue(this, flickr);
-            mElapsedTime.setValue(true);
-            bundle.putString(SEND_TEXT, "Good");
-            resReceiver.send(GOOD_RESULT, bundle);
+            FlickrDatabase.getInstance(this).flickrDao().insert(flickr.getItems());
+//            InsertDbService.enqueue(this, flickr);
+            resReceiver.send(ResReceiver.IDLE, new Bundle());
         } catch (IOException e) {
-            Log.e(TAG, "onHandleWork: " + e.getMessage());
-            mElapsedTime.setValue(false);
-            bundle.putString(SEND_TEXT, "Good");
-            resReceiver.send(BAD_RESULT, bundle);
+            Bundle bundle = new Bundle();
+            bundle.putString(SEND_TEXT, e.getLocalizedMessage());
+            resReceiver.send(ResReceiver.ERROR, bundle);
         }
-    }
-
-    public MutableLiveData<Boolean> getmElapsedTime() {
-        return mElapsedTime;
     }
 }

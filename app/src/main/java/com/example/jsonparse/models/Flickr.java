@@ -39,7 +39,7 @@ public class Flickr implements Parcelable {
 
     @SerializedName("items")
     @Expose
-    private List<Item> items = null;
+    private List<Item> items;
 
     protected Flickr(Parcel in) {
         title = in.readString();

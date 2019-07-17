@@ -2,23 +2,18 @@ package com.example.jsonparse.services;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.ResultReceiver;
 
-public class ResReceiver extends android.os.ResultReceiver {
+public class ResReceiver extends ResultReceiver {
+
+    public static final int IDLE = 1;
+    public static final int RUNNING = 2;
+    public static final int ERROR = 3;
 
     private Receiver mReceiver;
 
-        /**
-         * Create a new ResultReceive to receive results.  Your
-         * {@link #onReceiveResult} method will be called from the thread running
-         * <var>handler</var> if given, or from an arbitrary thread if null.
-         *
-         * @param handler
-         */
-    public ResReceiver(Handler handler) {
-        super(handler);
-    }
-
-    public void setReceiver(Receiver receiver) {
+    public ResReceiver(Receiver receiver) {
+        super(new Handler());
         mReceiver = receiver;
     }
 
