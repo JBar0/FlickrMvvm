@@ -3,6 +3,7 @@
     package="com.example.jsonparse">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +19,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".services.InsertDbService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.UpdateDbService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.DeleteDbService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.DownloadService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
     </application>
 
 </manifest>

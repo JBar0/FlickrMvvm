@@ -1,5 +1,8 @@
 package com.example.jsonparse.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -7,10 +10,11 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Flickr {
+public class Flickr implements Parcelable {
 
 
     @SerializedName("title")
@@ -36,6 +40,28 @@ public class Flickr {
     @SerializedName("items")
     @Expose
     private List<Item> items = null;
+
+    protected Flickr(Parcel in) {
+        title = in.readString();
+        link = in.readString();
+        description = in.readString();
+        modified = in.readString();
+        generator = in.readString();
+        items = new ArrayList<>();
+        in.readList(items, Item.class.getClassLoader());
+    }
+
+    public static final Creator<Flickr> CREATOR = new Creator<Flickr>() {
+        @Override
+        public Flickr createFromParcel(Parcel in) {
+            return new Flickr(in);
+        }
+
+        @Override
+        public Flickr[] newArray(int size) {
+            return new Flickr[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -83,5 +109,20 @@ public class Flickr {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(link);
+        dest.writeString(description);
+        dest.writeString(modified);
+        dest.writeString(generator);
+        dest.writeList(items);
     }
 }

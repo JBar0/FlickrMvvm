@@ -1,15 +1,17 @@
 package com.example.jsonparse;
 
 import android.app.Application;
-import android.app.ListActivity;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.jsonparse.services.DownloadService;
 import com.example.jsonparse.models.Flickr;
 import com.example.jsonparse.models.Item;
+import com.example.jsonparse.services.ResReceiver;
 
 import java.util.List;
 
@@ -19,31 +21,35 @@ public class ViewModel extends AndroidViewModel {
 
     MutableLiveData<Boolean> isLoading;
 
-    public ViewModel(@NonNull Application application) {
+    public ViewModel(@NonNull Application application, ResReceiver receiver) {
         super(application);
         this.repository = new Repository(application);
         this.liveFlickr = getLiveFlickr();
-        refresh();
+        refresh(application.getApplicationContext(), receiver);
     }
 
-    public void refresh(){
-        this.repository.getFlickr();
+    public void refresh(Context context, ResReceiver receiver){
+        DownloadService.enqueue(context, receiver);
     }
 
     public LiveData<List<Item>> getLiveFlickr() {
         return repository.getAllFlickrEnt();
     }
 
-    public void insert(List<Item> items) {
-        repository.insert(items);
+    public MutableLiveData<Boolean> getDownloadResult() {
+        return repository.getDownloadResult();
     }
 
-    public void update(List<Item> items) {
-        repository.delete(items);
+    public void insert(Context context, Flickr flickr) {
+        repository.insert(context, flickr);
     }
 
-    public void delete(List<Item> items) {
-        repository.delete(items);
+    public void update(Context context, Flickr flickr) {
+        repository.update(context, flickr);
+    }
+
+    public void delete(Context context, Flickr flickr) {
+        repository.delete(context, flickr);
     }
 
 }
